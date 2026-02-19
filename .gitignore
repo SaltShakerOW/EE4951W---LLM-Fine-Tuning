@@ -1,0 +1,10 @@
+#ignore auto generated files
+.DS_Store
+__pycache__/
+*.pyc
+
+#ignore model files as they are huge
+*.gguf
+
+#ignore venv
+llm-proj-venv/
