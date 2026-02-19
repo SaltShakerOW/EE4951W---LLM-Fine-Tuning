@@ -14,12 +14,12 @@ model_options = {
 
 system_prompt = "You are a helpful assistant. Respond to the user's messages as concisely as possible."
 
-@st.cache_resource(show_spinner="Loading model...")
+@st.cache_resource()
 def load_model(model_path: str):
     return Llama(
         model_path=model_path,
         n_gpu_layers=-1,
-        n_ctx=4096,
+        n_ctx=2048,
         verbose=False,
     )
 
@@ -34,7 +34,7 @@ model_path = model_options[selected_model]
 #reset chat upon model change
 if st.session_state.get("active_model") != selected_model:
     st.session_state.active_model = selected_model
-    st.session_state_state.messages = init_messages()
+    st.session_state.messages = init_messages()
 
 with st.spinner(f"Loading {selected_model}..."):
     llm=load_model(model_path)
@@ -61,7 +61,7 @@ if prompt := st.chat_input("Enter your message..."):
     with st.chat_message("assistant"):
         response = st.empty()
         full_response = ""
-        
+
         stream = llm.create_chat_completion(
             messages = st.session_state.messages,
             stream = True,
