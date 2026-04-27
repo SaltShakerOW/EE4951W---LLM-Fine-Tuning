@@ -8,21 +8,21 @@ st.set_page_config(
 )
 
 model_options = {
-    "run7 (with LoRA)": {
-        "base": "run7q4km.gguf",
-        "lora": "run7lora.gguf"
-    },
-    "run7 (base only)": {
-        "base": "run7q4km.gguf",
+    "Base Model": {
+        "base": "baseq4km.gguf",
         "lora": None
     },
-    "Vanilla LLama3.1-8B": {
-        "base": "Meta-Llama-3.1-8B-Instruct-Q4_K_M.gguf",
-        "lora": None
+    "Base + AdamW": {
+        "base": "baseq4km.gguf",
+        "lora": "adamwLora.gguf"
     },
-    "Custom Tuned Model": {
-        "base": "custom_tuned_model.gguf",
-        "lora": None
+    "Base + Muon (20x LR, run8)": {
+        "base": "baseq4km.gguf",
+        "lora": "muon20lora.gguf" 
+    },
+    "Base + Muon (10x LR, run7)": {
+        "base": "baseq4km.gguf",
+        "lora": "muon10lora.gguf"
     }
 }
 
@@ -36,7 +36,7 @@ def load_model(model_key: str, base_path: str, lora_path: str | None):
         model_path=base_path,
         lora_path=lora_path,
         lora_scale=1.0 if lora_path else None,
-        n_gpu_layers=0,
+        n_gpu_layers=-1,
         n_ctx=2048,  
         verbose=False,
     )
@@ -77,6 +77,8 @@ with st.spinner(f"Loading {selected_model}..."):
         model_config["base"],
         model_config["lora"]
     )
+    print(llm.model_path)
+    print(llm.lora_path)
 
 
 st.caption(f"{selected_model} loaded successfully")

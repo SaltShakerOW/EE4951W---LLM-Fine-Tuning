@@ -14,28 +14,48 @@
 ### Quick Start
 1. Create a new directory to clone repository into
 2. Navigate to the directory in the terminal and run the following command:
+
 `git clone https://github.com/SaltShakerOW/EE4951W---LLM-Fine-Tuning.git`
+
 3. Create a blank venv with the following commands:
+
 `python -m venv .venv`
+
 `source .venv/bin/activate`
+
 4. Run the following commmand in the terminal:
+
 `pip install -r requirements.txt`
+
 5. Follow the below sections for how to get the .gguf files for the base model and LoRA delta weights.
-6. Run the python file using the following command in the terminal:
+6. Make sure that the file names and paths for the .gguf files are in the code in the `model_options` dictionary
+7. Run the python file using the following command in the terminal:
+
 `streamlit run main.py`
 
 ### How to get the .gguf files
 #### Base model
 1. Download the [base model](https://huggingface.co/meta-llama/Llama-3.1-8B-Instruct/tree/main) from Hugging Face (need to request access)
-2. Clone and enter llama.cpp:
+2. Clone and enter llama.cpp then install the requirements.txt (I just did it in the same venv):
+
 `git clone https://github.com/ggml-org/llama.cpp.git`
+
 `cd llama.cpp`
+
+`pip install -r requirements.txt`
+
 3. Convert the base model into a .gguf file:
+
 `python convert_hf_to_gguf.py ../base --outfile base.gguf --outtype f16`
+
 * This example assumes the base model is in the directory `../base` relative to the `llama.cpp` directory and sets the precision to f16
+
 4. Quantize the model:
+
 `./build/bin/llama-quantize base.gguf baseQ4KM.gguf q4_k_m`
+
 * This example quantizes to Q4_K_M
+
 5. Move the quantized base model .gguf file (in the previous examples this is `baseQ4KM.gguf`) from the llama.cpp directory to the same directory as the `main.py` file in this project
 
 #### LoRA Delta Weights
